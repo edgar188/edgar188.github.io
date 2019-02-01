@@ -1,0 +1,40 @@
+body {
+	background-color: #16BBBE;
+}
+
+.wrap {
+	width: 100%;
+}
+
+.karkas {
+	width: 800px;
+	height: 800px;
+	background-color: #e6e6e6;
+	border-radius: 10px;
+	margin:0px auto;
+	text-align: center;
+	padding:30px 10px 0px 10px;
+}
+
+	
+#parent {
+	position: absolute;
+	left: 580px;
+	top: 380px;
+	width: 250px;
+	background-color: white;
+	border: 1px solid black;
+	
+}
+
+#child {
+	background-color: #FFBBBE;
+	border: 1px solid black;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	padding: 5px;
+	margin: 20px 10px;
+
+}
+
