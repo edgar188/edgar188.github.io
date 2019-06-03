@@ -62,14 +62,3 @@ document.querySelector("img").onclick = () => {
 	return getSlideShow();
 }
 
-
-
-
-
-
-
-
-
-
-
-
