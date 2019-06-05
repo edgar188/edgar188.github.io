@@ -44,7 +44,7 @@ const getSlideShow = () => {
 	
 	if (buttonSpan.children[0].innerText === "Play") {
 		buttonSpan.children[0].innerText = "Stop";
-		return timer = setInterval(passHandler, 750);
+		return timer = setInterval(passHandler, 500);
 	}
 
 	buttonSpan.children[0].innerText = "Play";
