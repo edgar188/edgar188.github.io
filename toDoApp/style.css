@@ -53,20 +53,20 @@ button {
 	color: #fff;
 }
 
+button:hover {background: grey;}
+
 #mainDiv {
 	overflow: hidden;
 	max-width: 90%;
 	margin: 10px auto;
 	text-align: center;
 	margin-bottom: 30px;
-	cursor: pointer;
 	text-align: left;
 }
 
 #mainDiv #whatToDo {
 	text-decoration: underline;
 	font-size: 24px;
-	cursor: default;
 }
 
 .msgDiv {
@@ -77,8 +77,12 @@ button {
 	margin-top: 25px;
 	text-align: center;
 	min-height: 35px;
-	cursor: default;
 	background: #0d1214a3;
+	cursor: pointer;
+}
+
+.msgDiv:hover {
+	background: grey;
 }
 
 .msgDiv p {
