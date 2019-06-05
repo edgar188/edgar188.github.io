@@ -23,16 +23,16 @@ const passHandler = side => {
 		if (imgSource === arr[0]) {
 			img.src = img["src"].replace(imgSource, arr[arr.length-1]);
 		} else {
-			let t = arr.indexOf(imgSource);
-			img.src = img["src"].replace(imgSource, arr[t-1]);
+			let temp = arr.indexOf(imgSource);
+			img.src = img["src"].replace(imgSource, arr[temp-1]);
 		}
 	}
 	else {
 		if (imgSource === arr[arr.length-1]) {
 			img.src = img["src"].replace(imgSource, arr[0]);
 		} else {
-			let t = arr.indexOf(imgSource);
-			img.src = img["src"].replace(imgSource, arr[t+1]);
+			let temp = arr.indexOf(imgSource);
+			img.src = img["src"].replace(imgSource, arr[temp+1]);
 		}
 	}
 };
