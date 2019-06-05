@@ -4,7 +4,7 @@ const passHandler = side => {
 	const left = document.getElementById("left"),
 		right = document.getElementById("right"),
 		img = document.querySelector("img"),
-		imgSource = img["src"].slice(img["src"].indexOf("/img"));
+		imgSource = img["src"].slice(img["src"].indexOf("/img/"));
 
 	let arr = [
 	"/img/1.jpg",
