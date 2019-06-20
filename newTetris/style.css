@@ -1,0 +1,49 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	margin: 10px 125px;
+	max-width: 50%;
+	padding: 5px;
+	background-color: #8bc34a;
+	border: 2px solid black;
+	color: white;
+}
+
+#wrapper {
+	border: 2px solid black;
+	width: fit-content;
+	margin: 40px;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.box {
+	box-sizing: border-box;
+	background-color: #8bc34a;
+	text-align: center;
+	width: 30px;
+	height: 30px;
+	border: 1px solid black;
+	font-size: 12px;
+	color: #8bc34a;
+	
+}
+
+.box[data-state="1"] {
+	background-color: #FF465F;
+	color: #FF465F;
+}
+
+.box[data-state="2"] {
+	background-color: #164e7a;
+	color:  #164e7a;
+}
+
+
+
