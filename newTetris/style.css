@@ -1,0 +1,134 @@
+body {
+	margin: 0 auto;
+	padding: 0;
+	text-align: center;
+	background-color: burlywood;
+	max-width: 90%;
+	color: #2F1B11;
+	font-family: cursive , sans-serif;
+}
+
+header, footer{
+	max-width: 100%;
+}
+
+#button {
+	padding: 10px;
+	background-color: #2F1B11;
+	border: 3px solid #2F1B11;
+	color: burlywood;
+	border-radius: 10px;
+	font-weight: bold;
+	float: left;
+	font-size: x-large;
+	line-height: 0;
+	cursor: pointer;
+}
+
+main {
+	max-width: 85%;
+	margin: 0 auto;
+	border: 10px solid #2F1B11;
+	border-radius: 50px;
+	-webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: antiquewhite;
+}
+
+#wrapper {
+	max-width: 70%;
+	margin: 20px auto;
+	display: flex;
+	justify-content: space-between;
+}
+
+#world {
+	border: 10px solid #2F1B11;
+    border-radius: 10px;
+    height: min-content;
+    margin-right: 20px;
+}
+
+#rigthSide {
+	margin-top: 10%;
+}
+
+#rigthSide #tetrisImg {
+	max-width: 250px;
+    min-width: 200px;
+    height: auto;
+    max-height: 150px;
+    border: 5px solid #2F1B11;
+    border-radius: 10px;
+    margin-top: -20%;
+}
+
+.statistics {
+	max-width: 200px;
+    min-width: 100px;
+    width: 100px;
+    height: 50px;
+    border: 3px solid #2F1B11;
+    border-radius: 10px;
+    background-color: burlywood;
+    color: #2F1B11;
+    margin-top: 10px;
+    line-height: 20px;
+    font-weight: bold;
+    display: table;
+
+}
+
+.statistics span {
+	display: table-cell 
+}
+.statistics h4 {
+	display: table-cell 
+}
+
+#arrows {
+	margin-top: 50%;
+	border: 3px solid #2F1B11;
+	background-color: burlywood;
+	border-radius: 20px;
+}
+
+#arrows img {
+	width: 50px;
+}
+#arrows img:hover {
+	background-color: #2F1B11;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.box {
+	box-sizing: border-box;
+	background-color: black;
+	text-align: center;
+	width: 25px;
+	height: 25px;
+	border: 1px solid #2F1B11;
+	font-size: 3px;
+	color:black;
+}
+
+
+.box[data-state="1"] {
+	background-color: burlywood;
+	color: burlywood;
+}
+
+.box[data-state="2"] {
+	background-color: #855A44;
+	color: #855A44;
+}
+
+.row[data-hidden = "10"] {
+   display: none;
+}
