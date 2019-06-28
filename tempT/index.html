@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tetris</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+</head>
+<body>
+<header>
+	<h1>Tetris</h1>
+</header>
+<main>
+	<div id="wrapper">
+		<div id="world"></div>
+		<div id="rigthSide">
+			<div><img src="images/hd1.jpg" id="tetrisImg"></div>
+			<div class="statistics">Record<p>34</p></div>
+			<div class="statistics">LEVEL<p>1</p></div>
+			<div class="statistics">SCORE<p>0</p></div>
+			<div class="statistics">LINES<p>0</p></div>
+			<button type="button" class="statistics" id="button">Start</button>
+		</div>
+		<div id="arrows">
+				<img src="images/up.png"><br>
+				<img src="images/left.png">
+				<img src="images/down.png">
+				<img src="images/right.png">
+		</div>
+	</div>
+</main>
+<footer>
+	<span></span>
+</footer>
+<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
