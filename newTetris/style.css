@@ -8,25 +8,21 @@ body {
 	font-family: cursive , sans-serif;
 }
 
-header, footer{
-	max-width: 100%;
-}
-
 #button {
 	padding: 10px;
 	background-color: #2F1B11;
 	border: 3px solid #2F1B11;
-	color: burlywood;
 	border-radius: 10px;
 	font-weight: bold;
 	float: left;
 	font-size: x-large;
 	line-height: 0;
 	cursor: pointer;
+	color: burlywood;
 }
 
 main {
-	max-width: 85%;
+	max-width: 80%;
 	margin: 0 auto;
 	border: 10px solid #2F1B11;
 	border-radius: 50px;
@@ -42,6 +38,7 @@ main {
 	margin: 20px auto;
 	display: flex;
 	justify-content: space-between;
+	overflow: hidden;
 }
 
 #world {
@@ -56,14 +53,15 @@ main {
 }
 
 #rigthSide #tetrisImg {
-	max-width: 250px;
-    min-width: 200px;
-    height: auto;
-    max-height: 150px;
+	max-width: 200px;
+    min-width: 100px;
+    height: 140px;
+    margin-top: -30%;
+    box-sizing: border-box;
     border: 5px solid #2F1B11;
     border-radius: 10px;
-    margin-top: -20%;
 }
+
 
 .statistics {
 	max-width: 200px;
@@ -75,10 +73,9 @@ main {
     background-color: burlywood;
     color: #2F1B11;
     margin-top: 10px;
-    line-height: 20px;
+    line-height: 10px;
     font-weight: bold;
     display: table;
-
 }
 
 .statistics span {
@@ -89,10 +86,11 @@ main {
 }
 
 #arrows {
-	margin-top: 50%;
+	height: fit-content;
 	border: 3px solid #2F1B11;
 	background-color: burlywood;
 	border-radius: 20px;
+	margin-top: 56%;
 }
 
 #arrows img {
@@ -118,7 +116,6 @@ main {
 	color:black;
 }
 
-
 .box[data-state="1"] {
 	background-color: burlywood;
 	color: burlywood;
@@ -132,3 +129,25 @@ main {
 .row[data-hidden = "10"] {
    display: none;
 }
+
+@media only screen and (max-width: 1200px) {
+	header {
+		margin-top: -25px;
+	}
+	main {
+		max-width: 90%;
+		margin-top: -20px;
+	}
+
+	#arrows {
+		margin-top: 68%;
+	}
+
+	#arrows img{
+		width: 30px;
+	}
+}
+
+
+
+

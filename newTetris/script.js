@@ -1,33 +1,26 @@
+"use strict";
+
 (function createTetrisWorld() {
 	let world = document.getElementById("world");
 	for(let y = 0; y < 22; y++) {
 		let row = document.createElement("div");
 		row.className = "row";
 		row.id = y;
-		if(y < 2) row.dataset.hidden = "10";
+		if(y < 2) row.dataset.hidden = 10;
 		for(let x = 0; x < 10; x++) {
 			let box = document.createElement("div");
 			box.className = "box";
 			box.innerText = y + "." + x;
-			box.setAttribute("data-state", 0);
+			box.dataset.state = 0;
 			row.appendChild(box);
 		}
 		world.appendChild(row);
 	}
 })();
 
-const allBoxes = document.getElementsByClassName("box");
-const allRows = document.getElementsByClassName("row");
-let timer;
-let level = document.getElementsByClassName("statistics")[0].children[0];
-let score = document.getElementsByClassName("statistics")[1].children[0];
-let lines = document.getElementsByClassName("statistics")[2].children[0];
-let scoreSum = +score.innerText;
-let linesSum = +lines.innerText;
-let levelSum = +level.innerText;
-
-
-const tetrominoes = [
+const allBoxes = document.getElementsByClassName("box"),
+	allRows = document.getElementsByClassName("row"),
+	tetrominoes = [
 		[0.4, 0.5, 0.6, 1.6], // J 
 		[0.4, 0.5, 1.4, 1.5], // O 
 		[0.4, 0.5, 1.5, 1.6], // Z 
@@ -35,28 +28,41 @@ const tetrominoes = [
 		[0.4, 0.5, 0.6, 1.4], // L
 		[0.5, 0.6, 1.4, 1.5], // S 
 		[0.4, 0.5, 0.6, 1.5] // T 
-];
+	];
+let timer,
+	level = document.getElementsByClassName("statistics")[1].children[0],
+	score = document.getElementsByClassName("statistics")[2].children[0],
+	lines = document.getElementsByClassName("statistics")[3].children[0],
+	record = document.getElementsByClassName("statistics")[0].children[0],
+	scoreSum = +score.innerText,
+	linesSum = +lines.innerText,
+	levelSum = +level.innerText;
+
+localStorage.setItem('record', localStorage.getItem("record") || 38);
+record.innerText = localStorage.getItem('record');
+
 function moveLeft() {
 	let activeBoxes = [];
 	for(let box of allBoxes) if(box.dataset.state == 1) activeBoxes.push(box.innerText);
 	return (canMove(activeBoxes, "left")) ? move("left", activeBoxes) : true;
 }
+
 function moveRight() {
 	let activeBoxes = [];
 	for(let box of allBoxes) if(box.dataset.state == 1) activeBoxes.push(box.innerText);
 	return (canMove(activeBoxes, "right")) ? move("right", activeBoxes) : true;
 }
+
 function moveDown() {
 	let activeBoxes = [];
 	for(let box of allBoxes) if(box.dataset.state == 1) activeBoxes.push(box.innerText);
 
 	if(gameOver(activeBoxes) == true) {
 		return setTimeout(function(){
+			if (scoreSum > localStorage.getItem('record')) localStorage.setItem('record', scoreSum);
 			location.reload();
-			alert(`Game Over !
-				Your Score: ${scoreSum}`);
+			alert(`Game Over ! Your Score: ${scoreSum}`);
 		}, 800);
-		return;
 	}
 
 	if(canMove(activeBoxes, "down")) return move("down", activeBoxes);
@@ -75,13 +81,14 @@ function moveDown() {
 	return start();	
 	}
 }
+
 function rotate() {
-	let n = +document.getElementsByTagName("span")[0].innerText;
 	sound("selection.wav");
-	let activeBoxes = [];
-	for(let box of allBoxes) if(box.dataset.state == 1) {
-		activeBoxes.push(box.innerText);
-	}
+	let n = +document.getElementsByTagName("span")[0].innerText,
+		activeBoxes = [];
+
+	for(let box of allBoxes) if(box.dataset.state == 1) activeBoxes.push(box.innerText);
+	
 	if (n == 3) {
 		// I
 		for(let a = 0; a < allBoxes.length; a++) {
@@ -92,14 +99,14 @@ function rotate() {
 				allBoxes[a+3].dataset.state == 1 &&
 				allBoxes[a+11].dataset.state != 2 &&
 				allBoxes[a+21].dataset.state != 2 &&
-				allBoxes[a+31].dataset.state != 2) {
+				allBoxes[a+31].dataset.state != 2) 
+			{
 					allBoxes[a+11].dataset.state = 1;
 					allBoxes[a+21].dataset.state = 1;
 					allBoxes[a+31].dataset.state = 1;
 					allBoxes[a].dataset.state = 0;
 					allBoxes[a+2].dataset.state = 0;
 					allBoxes[a+3].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a+1].innerText, 
 									allBoxes[a+11].innerText,
 									allBoxes[a+21].innerText,
@@ -116,17 +123,15 @@ function rotate() {
 				allBoxes[a+1].dataset.state != 2 &&
 				allBoxes[a+2].dataset.state != 2) 
 				{
-					for(let el of activeBoxes) {
-						if(el[el.length-1] == 0 || el[el.length-1] == 9 || el[el.length-1] == 8) return;
-					}
+					for(let el of activeBoxes) if(el[el.length-1] == 0 || el[el.length-1] == 9 || el[el.length-1] == 8) return;
+			
 					allBoxes[a-1].dataset.state = 1;
 					allBoxes[a+1].dataset.state = 1;
 					allBoxes[a+2].dataset.state = 1;
 					allBoxes[a+10].dataset.state = 0;
 					allBoxes[a+20].dataset.state = 0;
 					allBoxes[a+30].dataset.state = 0;
-					activeBoxes = [
-									allBoxes[a].innerText, 
+					activeBoxes = [allBoxes[a].innerText, 
 									allBoxes[a-1].innerText,
 									allBoxes[a+1].innerText,
 									allBoxes[a+2].innerText];
@@ -150,7 +155,6 @@ function rotate() {
 					allBoxes[a+21].dataset.state = 1;
 					allBoxes[a+2].dataset.state = 0;
 					allBoxes[a].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a+10].innerText, 
 									allBoxes[a+11].innerText,
 									allBoxes[a+21].innerText,
@@ -165,14 +169,11 @@ function rotate() {
 					allBoxes[a+11].dataset.state != 2) 
 				{
 					let temp = 0;
-					for(let el of activeBoxes) {
-						if(el[el.length-1] == 9) temp +=1;
-					}
-					
+					for(let el of activeBoxes) if(el[el.length-1] == 9) temp +=1;
+				
 					if(temp > 1) return
 					allBoxes[a+11].dataset.state = 1;
 					allBoxes[a+20].dataset.state = 0;
-					
 					activeBoxes = [allBoxes[a].innerText, 
 									allBoxes[a+9].innerText,
 									allBoxes[a+10].innerText,
@@ -188,7 +189,6 @@ function rotate() {
 				{
 					allBoxes[a+20].dataset.state = 1;
 					allBoxes[a+9].dataset.state = 0;
-					
 					activeBoxes = [allBoxes[a].innerText, 
 									allBoxes[a+10].innerText,
 									allBoxes[a+11].innerText,
@@ -204,9 +204,8 @@ function rotate() {
 					allBoxes[a-1].dataset.state != 2) 
 				{
 					let temp = 0;
-					for(let el of activeBoxes) {
-						if(el[el.length-1] == 0) temp +=1;
-					}
+					for(let el of activeBoxes) if(el[el.length-1] == 0) temp +=1;
+
 					if(temp > 1) return;
 					allBoxes[a+1].dataset.state = 1;
 					allBoxes[a-1].dataset.state = 1;
@@ -237,7 +236,6 @@ function rotate() {
 					allBoxes[a+21].dataset.state = 1;
 					allBoxes[a+2].dataset.state = 0;
 					allBoxes[a+10].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a].innerText, 
 									allBoxes[a+1].innerText,
 									allBoxes[a+11].innerText,
@@ -252,20 +250,20 @@ function rotate() {
 					allBoxes[a+2].dataset.state != 2 &&
 					allBoxes[a+10].dataset.state != 2 &&
 					allBoxes[a+12].dataset.state != 2) {
-						for(let el of activeBoxes) {
-							if (el[el.length-1] == 9 || el[el.length-1] == 0) return; 
-						} 
+
+						for(let el of activeBoxes) if (el[el.length-1] == 9 || el[el.length-1] == 0) return; 
+					
 						allBoxes[a+2].dataset.state = 1;
 						allBoxes[a+10].dataset.state = 1;
 						allBoxes[a+12].dataset.state = 1;
 						allBoxes[a].dataset.state = 0;
 						allBoxes[a+1].dataset.state = 0;
 						allBoxes[a+21].dataset.state = 0;
-
 						activeBoxes = [allBoxes[a+2].innerText, 
-										allBoxes[a+11].innerText,
 										allBoxes[a+10].innerText,
+										allBoxes[a+11].innerText,
 										allBoxes[a+12].innerText];
+					break;				
 				}
 				else if (activeBoxes[0] == allBoxes[a].innerText && 
 					allBoxes[a+10].dataset.state == 1 &&
@@ -275,20 +273,20 @@ function rotate() {
 					allBoxes[a+2].dataset.state != 2 &&
 					allBoxes[a+18].dataset.state != 2 &&
 					allBoxes[a+19].dataset.state != 2) {
-						for(let el of activeBoxes) {
-							if (el[el.length-1] == 9 || el[el.length-1] == 0) return; 
-						} 
+
+						for(let el of activeBoxes) if (el[el.length-1] == 9 || el[el.length-1] == 0) return; 
+						
 						allBoxes[a-2].dataset.state = 1;
 						allBoxes[a+18].dataset.state = 1;
 						allBoxes[a+19].dataset.state = 1;
 						allBoxes[a].dataset.state = 0;
 						allBoxes[a+10].dataset.state = 0;
 						allBoxes[a+9].dataset.state = 0;
-
 						activeBoxes = [allBoxes[a-2].innerText, 
 										allBoxes[a+18].innerText,
 										allBoxes[a+19].innerText,
 										allBoxes[a+8].innerText];
+					break;				
 				}
 				else if (activeBoxes[0] == allBoxes[a].innerText &&
 					allBoxes[a].dataset.state == 1 &&
@@ -301,11 +299,11 @@ function rotate() {
 						allBoxes[a+2].dataset.state = 1;
 						allBoxes[a+20].dataset.state = 0;
 						allBoxes[a+21].dataset.state = 0;
-
 						activeBoxes = [allBoxes[a].innerText, 
 										allBoxes[a+1].innerText,
 										allBoxes[a+2].innerText,
 										allBoxes[a+10].innerText];
+					break;				
 				}
 			}
 		}	
@@ -326,12 +324,11 @@ function rotate() {
 					allBoxes[a].dataset.state = 0;
 					allBoxes[a+2].dataset.state = 0;
 					allBoxes[a+12].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a+1].innerText, 
 									allBoxes[a+11].innerText,
 									allBoxes[a+21].innerText,
 									allBoxes[a+20].innerText];
-					break;
+				break;
 			}
 			else if (activeBoxes[0] == allBoxes[a].innerText && 
 				allBoxes[a].dataset.state == 1 &&
@@ -340,9 +337,9 @@ function rotate() {
 				allBoxes[a+20].dataset.state == 1 &&
 				allBoxes[a-1].dataset.state != 2 &&
 				allBoxes[a+11].dataset.state != 2) {
-					for(let el of activeBoxes) {
-						if(el[el.length-1] == 9 || el[el.length-1] == 0) return
-					}
+
+					for(let el of activeBoxes) if(el[el.length-1] == 9 || el[el.length-1] == 0) return
+
 					allBoxes[a-1].dataset.state = 1;
 					allBoxes[a+9].dataset.state = 1;
 					allBoxes[a+10].dataset.state = 1;
@@ -350,12 +347,11 @@ function rotate() {
 					allBoxes[a].dataset.state = 0;
 					allBoxes[a+19].dataset.state = 0;
 					allBoxes[a+20].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a-1].innerText, 
 									allBoxes[a+9].innerText,
 									allBoxes[a+10].innerText,
 									allBoxes[a+11].innerText];
-					break;
+				break;
 			}
 			else if (activeBoxes[0] == allBoxes[a].innerText && 
 				allBoxes[a].dataset.state == 1 &&
@@ -368,12 +364,11 @@ function rotate() {
 					allBoxes[a+20].dataset.state = 1;
 					allBoxes[a+11].dataset.state = 0;
 					allBoxes[a+12].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a].innerText, 
 									allBoxes[a+1].innerText,
 									allBoxes[a+10].innerText,
 									allBoxes[a+20].innerText];
-					break;
+				break;
 			}
 			else if (activeBoxes[0] == allBoxes[a].innerText && 
 				allBoxes[a].dataset.state == 1 &&
@@ -382,19 +377,17 @@ function rotate() {
 				allBoxes[a+20].dataset.state == 1 &&
 				allBoxes[a+2].dataset.state != 2 &&
 				allBoxes[a+12].dataset.state != 2) {
-					for(let el of activeBoxes) {
-						if(el[el.length-1] == 0 || el[el.length-1] == 9) return
-					}
+					for(let el of activeBoxes) if(el[el.length-1] == 0 || el[el.length-1] == 9) return
+					
 					allBoxes[a+2].dataset.state = 1;
 					allBoxes[a+12].dataset.state = 1;
 					allBoxes[a+10].dataset.state = 0;
 					allBoxes[a+20].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a].innerText, 
 									allBoxes[a+1].innerText,
 									allBoxes[a+2].innerText,
 									allBoxes[a+12].innerText];
-					break;
+				break;
 				}
 			}
 		}
@@ -413,7 +406,6 @@ function rotate() {
 				allBoxes[a+20].dataset.state = 1;
 				allBoxes[a].dataset.state = 0;
 				allBoxes[a+12].dataset.state = 0;
-
 				activeBoxes = [allBoxes[a+1].innerText, 
 								allBoxes[a+10].innerText,
 								allBoxes[a+11].innerText,
@@ -428,19 +420,17 @@ function rotate() {
 				allBoxes[a-1].dataset.state != 2 &&
 				allBoxes[a+11].dataset.state != 2) {
 				
-				for(let el of activeBoxes) {
-					if(el[el.length-1] == 9) return;
-				}
+				for(let el of activeBoxes) if(el[el.length-1] == 9) return;
+				
 					allBoxes[a-1].dataset.state = 1;
 					allBoxes[a+11].dataset.state = 1;
 					allBoxes[a+9].dataset.state = 0;
 					allBoxes[a+19].dataset.state = 0;
-
 					activeBoxes = [allBoxes[a-1].innerText, 
 									allBoxes[a].innerText,
 									allBoxes[a+10].innerText,
 									allBoxes[a+11].innerText];
-					break;
+				break;
 			}
 		}
 	}
@@ -474,14 +464,12 @@ function rotate() {
 				allBoxes[a+1].dataset.state != 2 &&
 				allBoxes[a+9].dataset.state != 2) 
 			{	
-				for(let el of activeBoxes) {
-					if(el[el.length-1] == 0) return
-				}
+				for(let el of activeBoxes) if(el[el.length-1] == 0) return
+				
 				allBoxes[a+1].dataset.state = 1;
 				allBoxes[a+9].dataset.state = 1;
 				allBoxes[a+11].dataset.state = 0;
 				allBoxes[a+21].dataset.state = 0;
-
 				activeBoxes = [allBoxes[a].innerText, 
 								allBoxes[a+1].innerText,
 								allBoxes[a+9].innerText,
@@ -513,10 +501,10 @@ document.body.onkeydown = function(e) {
 document.body.onkeyup = function(e) {
 	let arrows = document.getElementById("arrows").children;
 	switch (e.which) {
-		case 38: arrows[0].style.background = 'burlywood';
-		case 40: arrows[3].style.background = 'burlywood';
-		case 37: arrows[2].style.background = 'burlywood';
-		case 39: arrows[4].style.background = 'burlywood';	
+		case 38: return arrows[0].style.background = 'burlywood';
+		case 40: return arrows[3].style.background = 'burlywood';
+		case 37: return arrows[2].style.background = 'burlywood';
+		case 39: return arrows[4].style.background = 'burlywood';	
 	}
 }
 
@@ -531,6 +519,7 @@ function rowOut() {
 
 	for(let row of allRows) {
 		check = true;
+
 		for(let box of row.children) {
 			if (+box.dataset.state !== 2) {
 				check = false;
@@ -538,16 +527,12 @@ function rowOut() {
 			}
 		}
 		if (check) {
-			for(let box of row.children) {
-				box.dataset.state = 0;
-			}
-
-			for(let i = +row.id*10+9; i > 10; i--) {
-				allBoxes[i].dataset.state = allBoxes[i-10].dataset.state;
-			}
-
+			for(let box of row.children) box.dataset.state = 0;
+			
+			for(let i = +row.id*10+9; i > 10; i--) allBoxes[i].dataset.state = allBoxes[i-10].dataset.state;
+			
 			lines.innerText = ++linesSum;
-			score.innerText = scoreSum += 10; 
+			score.innerText = scoreSum += 10 * levelSum; 
 			sound("line.wav");
 			if (linesSum % 3 === 0) {
 				level.innerText = ++levelSum;
@@ -558,16 +543,15 @@ function rowOut() {
 }
 
 function sound(sound, mainSound) {
-	const audio = document.createElement("audio");
-	const source = document.createElement("source");
+	const audio = document.createElement("audio"),
+		source = document.createElement("source");
 	audio.setAttribute("autoplay", "");
 	audio.style.display = 'none';
 	if(mainSound) {
 		source.src = "sounds/"+mainSound;
 		audio.setAttribute("loop", "");
 		source.type = "audio/mpeg";
-	}
-	else {
+	}else {
 		source.src = "sounds/"+sound;
 		source.type = "audio/wav";
 	}
@@ -577,11 +561,7 @@ function sound(sound, mainSound) {
 
 function froozenBoxes() {
 	let result = [];
-	for(let box of allBoxes) {
-		if (+box.innerText >= 2 && box.dataset.state == 2) {
-			result.push(box.innerText);
-		}
-	}
+	for(let box of allBoxes) if (+box.innerText >= 2 && box.dataset.state == 2) result.push(box.innerText);
 	return result;
 }
 
@@ -597,7 +577,6 @@ function canMove(currentFigure, to) {
 				}	
 
 				for(let frozBox of froozenBoxes()) {
-					
 					if (+el+1 === +frozBox) {
 						for(let currF of currentFigure) {
 							for(let box of allBoxes) {
@@ -623,7 +602,7 @@ function canMove(currentFigure, to) {
 					return false;
 				}	
 				for(let frozBox of froozenBoxes()) {	
-					if(Math.round((+el+0.1)*10)/10 == +frozBox && String(+el+1).length === frozBox.length) {
+					if(Math.round((+el+0.1)*10)/10 == +frozBox && String(+el+1).length == frozBox.length) {
 						sound("fall.wav");
 						return false;	
 					}
@@ -639,7 +618,7 @@ function canMove(currentFigure, to) {
 					return false;
 				}
 				for(let frozBox of froozenBoxes()) {
-					if(Math.round((+el-0.1)*10)/10 == +frozBox && String(+el+1).length === frozBox.length){
+					if(Math.round((+el-0.1)*10)/10 == +frozBox && String(+el+1).length == frozBox.length){
 						sound("fall.wav");
 						return false;
 					}
@@ -651,7 +630,6 @@ function canMove(currentFigure, to) {
 
 function start() {
 	rowOut();
-
 	let tetromino = getRandomlyTetrominoes();
 
 	for(let row of allRows) {
@@ -664,35 +642,28 @@ function start() {
 					}	
 				}
 			}
-		}
-		else break;
+		}else break;
 	}
 
 	timer = setInterval(function() {
-
 	let activeBoxes = [];
-	for(let box of allBoxes) {
-		if(box.dataset.state == 1) {
-			activeBoxes.push(box.innerText);
-		}
-	}
 
+	for(let box of allBoxes) if(box.dataset.state == 1) activeBoxes.push(box.innerText);
+		
 	if(gameOver(activeBoxes) == true) {
 		sound("gameover.wav");
 		return setTimeout(function() {
-			location.reload();
-			alert(`Game Over !
-				Your Score: ${scoreSum}`);
+			if (scoreSum > localStorage.getItem('record')) localStorage.setItem('record', scoreSum);
+				location.reload();
+				alert(`Game Over ! Your Score: ${scoreSum}`);
 		}, 800)
-		
 	}
 
-	if(canMove(activeBoxes, "down")) {
-		return move("down", activeBoxes);
-	}
+	if(canMove(activeBoxes, "down")) return move("down", activeBoxes);
 	else {
 		clearInterval(timer);
 		timer = null;
+
 		for(let box of activeBoxes) {
 			for(let el of allBoxes) {
 				if(el.innerText == box && el.innerText.length == box.length) {
@@ -707,9 +678,10 @@ function start() {
 }
 
 function intervTime() {
-	if (levelSum < 3) return 800;
-	else if(levelSum >= 3 && levelSum <= 5) return 600;
-	else return 400;
+	if (levelSum < 3) return 1000;
+	if (levelSum >= 3 && levelSum < 6) return 800;
+	if (levelSum >= 6 && levelSum < 9) return 600;
+	return 400;
 }
 
 function move(to, arr) {
@@ -769,18 +741,13 @@ function move(to, arr) {
 			return;
 
 		case "left":
-
-		let leftCoords = [];
+			let leftCoords = [];
 			for(let el of arr) {
 				const index = el.indexOf(".");
 				el = String(el).split('');
 
-				if(el.slice(index+1).length == 1) {
-					el.splice(index+1, 1, +el[index+1]-1);
-				}
-				else {
-					el.splice(index+1, 2, +el.slice(index+1).join('')-1);
-				}
+				if(el.slice(index+1).length == 1) el.splice(index+1, 1, +el[index+1]-1);
+				else el.splice(index+1, 2, +el.slice(index+1).join('')-1);
 				leftCoords.push(el.join(""));
 			}
 			
@@ -806,9 +773,7 @@ function move(to, arr) {
 
 function gameOver(figure) {
 	for(let box of allRows[2].children) {
-		if (box.dataset.state == 2) {
-			return true;
-		}
+		if (box.dataset.state == 2) return true;
 	}
 }
 
@@ -824,7 +789,7 @@ document.addEventListener("click",function(e) {
 
 document.getElementById("arrows").addEventListener("click",function(e) {
 	if (e.target == document.getElementById("arrows").children[2]) return moveLeft();
-	else if (e.target == document.getElementById("arrows").children[4]) return moveRight();
-	else if (e.target == document.getElementById("arrows").children[3]) return moveDown();
-	else if (e.target == document.getElementById("arrows").children[0]) return rotate();
+	if (e.target == document.getElementById("arrows").children[4]) return moveRight();
+	if (e.target == document.getElementById("arrows").children[3]) return moveDown();
+	if (e.target == document.getElementById("arrows").children[0]) return rotate();
 },false)
